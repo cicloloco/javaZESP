@@ -1,2 +1,2 @@
 # javaZESP
-Chollos ZESP
+Pequeño proyecto Java para parsear las clasificaciones de ZwiftPower
