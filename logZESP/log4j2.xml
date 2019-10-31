@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ERROR" monitorInterval="30">
+ 
+    <!-- Logging Properties -->
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %p %m%n</Property>
+        <Property name="APP_LOG_ROOT">${sys:logPath}</Property>
+        <Property name="INI_APP_LOG_ROOT">/home/santiago/tmp/logZESP</Property>
+    </Properties>
+     
+    <Appenders>
+     
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+         
+        <!-- Log de todo, sin filtros -->
+        <RollingFile name="zespLog" fileName="${APP_LOG_ROOT}/jsonZP.log"
+            filePattern="${APP_LOG_ROOT}/zespLog-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+         
+        <!-- Log nivel DEBUG -->
+        <RollingFile name="debugLog" fileName="${APP_LOG_ROOT}/debug.log"
+            filePattern="${APP_LOG_ROOT}/debug-%d{yyyy-MM-dd}-%i.log">
+            <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+         
+        <!-- Log nivel INFO -->
+        <RollingFile name="infoLog" fileName="${APP_LOG_ROOT}/info.log"
+            filePattern="${APP_LOG_ROOT}/info-%d{yyyy-MM-dd}-%i.log" >
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+         
+        <!-- Log nivel ERROR -->
+        <RollingFile name="errorLog" fileName="${APP_LOG_ROOT}/error.log"
+            filePattern="${APP_LOG_ROOT}/error-%d{yyyy-MM-dd}-%i.log" >
+            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+         
+        <!-- Log nivel TRACE -->
+        <RollingFile name="traceLog" fileName="${APP_LOG_ROOT}/trace.log"
+            filePattern="${APP_LOG_ROOT}/trace-%d{yyyy-MM-dd}-%i.log" >
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+         
+        <RollingFile name="perfLog" fileName="${APP_LOG_ROOT}/perf.log"
+            filePattern="${APP_LOG_ROOT}/perf-%d{yyyy-MM-dd}-%i.log" >
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="1"/>
+        </RollingFile>
+         
+    </Appenders>
+ 
+    <Loggers>
+     
+        <Logger name="logZESP" additivity="false" level="all">
+            <AppenderRef ref="infoLog"  />
+            <AppenderRef ref="errorLog" />
+            <AppenderRef ref="debugLog" />
+            <AppenderRef ref="traceLog" />
+<!--
+-->
+        </Logger>
+                 
+        <Root level="warn">
+            <AppenderRef ref="Console"/>
+        </Root>
+ 
+    </Loggers>
+ 
+</Configuration>
