@@ -4,6 +4,11 @@ import java.util.List;
 
 public class ZP_Result {
 
+	/**
+	 * Subclases para mapeos de tipos complejos
+     * De momento, no se usa
+	 * @author santiago
+	 */
 	class TimeData {
 
 	    private Double t1;
@@ -109,6 +114,11 @@ public class ZP_Result {
 		}
 	}
 
+	/**
+	 * Los campos corresponden literalmente a lo que devuelve como JSON
+	 * Si cambian, lógicamente, requiere cambiar este mapero
+	 * OJO: zesp_time es un campo calculado durante el parsing
+	 */
 	private String DT_RowId;
 	private String ftp;
 	private int friend;

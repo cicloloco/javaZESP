@@ -2,8 +2,16 @@ package jsonZESP;
 
 import java.util.Arrays;
 
+/**
+ * Mapeo de eventos en ZwiftPower
+ * @author santiago
+ */
 public class ZP_Event {
 
+	/**
+	 * Los campos corresponden literalmente a lo que devuelve como JSON
+	 * Si cambian, lógicamente, requiere cambiar este mapero
+	 */
 	private String DT_RowId;
 	private int friends;
 	private int tent;

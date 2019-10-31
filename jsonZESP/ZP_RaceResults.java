@@ -1,47 +1,83 @@
 package jsonZESP;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import logZESP.LogZESP;
 
+
+/**
+ * Resultados de eventos del tipo TRace
+ * @author santiago
+ */
 public class ZP_RaceResults {
 	
 	private Reader reader;
+	private LogZESP logger;
 	private ArrayList<ZP_Result> zp_results;
 	
 	/**
-	 * Constructor con id del evento explícita
+	 * Constructor con logger
+	 * @param r fuente de datos
+	 * @param l logger
+	 */
+    public ZP_RaceResults(Reader r, LogZESP l) {
+		zp_results = new ArrayList<ZP_Result>();
+		this.reader = r;
+		this.logger = l;
+	}    
+
+	/**
+	 * Constructor sin logger
 	 * @param r fuente de datos
 	 */
     public ZP_RaceResults(Reader r) {
-		super();
-		// TODO Auto-generated constructor stub
-		zp_results = new ArrayList<ZP_Result>();
-		this.reader = r;
+    	this(r, null);
+	}    
+
+    /**
+     * Getter de resultados en el array
+     * @param i índice del resultado
+     * @return ZP_Result iésimo
+     */
+    public ZP_Result getZPres(int i) {
+		return zp_results.get(i);
 	}
     
-    public ArrayList<ZP_Result> getZp_results() {
-		return zp_results;
-	}
+    /**
+     * Tamaño del array de resultados
+     * @return nº de resultados que contiene
+     */
+    public int sizeZPres() {
+    	return zp_results.size();
+    }
 
-	public int getData() throws IOException {
-        JsonElement data, aux;
+    /**
+     * Obtener los datos desde ZwiftPower
+     * @return nº de resultados obtenidos
+     * @throws JsonIOException
+     * @throws JsonSyntaxException
+     */
+	public int getData() throws JsonIOException, JsonSyntaxException {
+        JsonElement data;
         JsonArray jsonArray;
         ZP_Result zpRes;
 
-        JsonParser parser = new JsonParser();
-        JsonElement jsonTree = parser.parse(reader);
+        JsonElement jsonTree = JsonParser.parseReader(reader);
         
         if(jsonTree.isJsonObject()) {
             JsonObject jsonObject = jsonTree.getAsJsonObject();
@@ -53,22 +89,40 @@ public class ZP_RaceResults {
 
                     zpRes = setResult((JsonObject) iterator.next());
                     this.zp_results.add(zpRes);
-
-//                    if(zpRes.getZid().equals("208032")) {
-              	  System.out.println("Res. #" + this.zp_results.size() + ": " + zpRes.toString());
-                  if(zpRes.getZwid() == 1268845) {
-                	  System.out.println("Aquí me paro");
-                  }
                     
+                    if (this.logger != null)
+        				logger.write(Level.INFO, "Res. #" + this.zp_results.size() + ": " + zpRes.toString());
+/*
+                    if(zpRes.getZid().equals("208032")) {
+                    	System.out.println("Res. #" + this.zp_results.size() + ": " + zpRes.toString());
+                    	if(zpRes.getZwid() == 1268845) {
+                    		System.out.println("Aquí me paro");
+                    	}                    
+                    }
+*/                
                 }
-                
             }
         }
         
         return this.zp_results.size();
     }
     
-    
+	/**
+	 * Volcar resultados a csv
+	 * @param csvpath path del fichero
+	 * @param header cabecera filtro de volcado
+	 */
+	public void dumpData(String csvpath, String[] header) {
+        ZespToCSV genCSV;
+		
+        genCSV = new ZespToCSV(csvpath, this.zp_results);
+        genCSV.convert(header);
+	}
+	
+    /*
+     * Parsing del JsonObject
+     * Cómputo de zesp_time
+     */
     private ZP_Result setResult(JsonObject jsonObject) {
         ZP_Result zpResult;
         JsonElement data;
@@ -255,6 +309,9 @@ public class ZP_RaceResults {
 		return converter.fromJson(jsonArray, type );
     }
     
+    /*
+     * Cómputo de zesp_time
+     */
 	private String tConverter(String str_time) {
         int horas = 0, minutos = 0, segundos = 0;
 		String sparts[] = str_time.split("\\.");

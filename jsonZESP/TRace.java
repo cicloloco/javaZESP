@@ -1,5 +1,9 @@
 package jsonZESP;
 
+/**
+ * Enumerado para los tipos de eventos a considerar
+ * @author santiago
+ */
 public enum TRace {
 	RoadRace("road_race", 0), Run("run", 1);
 

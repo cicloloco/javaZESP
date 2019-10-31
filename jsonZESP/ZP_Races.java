@@ -15,6 +15,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 
+/**
+ * Eventos ZP de tipo carrera TRace
+ * @author santiago
+ */
 public class ZP_Races {
 	
 	private Reader reader;
@@ -46,8 +50,7 @@ public class ZP_Races {
         JsonArray jsonArray;
         ZP_Event zpEvent;
 
-        JsonParser parser = new JsonParser();
-        JsonElement jsonTree = parser.parse(reader);
+        JsonElement jsonTree = JsonParser.parseReader(reader);
         Gson gson = new Gson();
         
         if(jsonTree.isJsonObject()) {
@@ -70,15 +73,9 @@ public class ZP_Races {
                     default:
                     	// Houston tenemos un problema (tipo no contemplado)
                     }
-                    
-                    
-                    if(zpEvent.getZid().equals("208032"))
-                        System.out.println("Aquí me paro");
-                }
-                
+                }                
             }
         }
-        
         return this.zp_races.size();
     }
     
