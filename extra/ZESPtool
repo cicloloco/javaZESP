@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+JAR_NAME=zesp_parser.jar
+JAR_DIR=.
+PATH_LIBS=/home/santiago/MEGAsync/Ciclismo/ZESP/JavaZESP
+INI_CONF=/home/santiago/MEGAsync/Ciclismo/ZESP/JavaZESP/JavaZESP.ini
+
+PATH_JAR=$JAR_DIR/$JAR_NAME
+ZESP_CP=$PATH_JAR:$PATH_LIBS/commons-beanutils-1.9.4.jar:$PATH_LIBS/commons-lang3-3.9.jar:$PATH_LIBS/opencsv-5.0.jar:$PATH_LIBS/gson-2.8.6.jar:$PATH_LIBS/commons-logging-1.2.jar:$PATH_LIBS/commons-collections4-4.4.jar:$PATH_LIBS/log4j-core-2.12.1.jar:$PATH_LIBS/log4j-api-2.12.1.jar
+
+java -cp $ZESP_CP ZESPtool $INI_CONF
